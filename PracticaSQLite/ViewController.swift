@@ -87,6 +87,38 @@ class ViewController: UIViewController {
         }
     }
     
+    private func update() {
+        let updateStatementString = "UPDATE Heroes SET Name = 'Chris' WHERE Id = 1;"
+        
+        var updateStatement: OpaquePointer? = nil
+        if sqlite3_prepare_v2(db, updateStatementString, -1, &updateStatement, nil) == SQLITE_OK {
+            if sqlite3_step(updateStatement) == SQLITE_DONE {
+                print("Successfully updated row.")
+            } else {
+                print("Could not update row.")
+            }
+        } else {
+            print("UPDATE statement could not be prepared")
+        }
+        sqlite3_finalize(updateStatement)
+    }
+    
+    private func delete() {
+        let deleteStatementStirng = "DELETE FROM Heroes WHERE Id = 1;"
+        
+        var deleteStatement: OpaquePointer? = nil
+        if sqlite3_prepare_v2(db, deleteStatementStirng, -1, &deleteStatement, nil) == SQLITE_OK {
+            if sqlite3_step(deleteStatement) == SQLITE_DONE {
+                print("Successfully deleted row.")
+            } else {
+                print("Could not delete row.")
+            }
+        } else {
+            print("DELETE statement could not be prepared")
+        }
+        sqlite3_finalize(deleteStatement)
+    }
+    
     private func readValues(){
        heroList.removeAll()
 
@@ -130,6 +162,10 @@ class ViewController: UIViewController {
     
     @IBAction func createAction(_ sender: UIButton) {
         createTable()
+    }
+    
+    @IBAction func updateAction(_ sender: Any) {
+        update()
     }
     
     
